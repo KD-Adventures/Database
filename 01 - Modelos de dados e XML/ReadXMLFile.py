@@ -2,6 +2,7 @@
 
 from xml.dom.minidom import parse
 import xml.dom.minidom
+import os
 
 
 
@@ -17,6 +18,9 @@ heroes = universe.getElementsByTagName("hero")
 
 tag = ["name", "popularity", "alignment", "gender","height_m","weight_kg","hometown",
         "intelligence","strength","speed","durability","energy_Projection","fighting_Skills"]
+
+if not os.path.exists("dadosMarvel"):
+    os.makedirs("dadosMarvel")
 
 herois = open("dadosMarvel/herois.csv", "w")
 heroisGood = open("dadosMarvel/herois_good.csv", "w")
