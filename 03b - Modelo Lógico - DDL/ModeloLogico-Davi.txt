@@ -6,8 +6,8 @@ CREATE TABLE Usuario (
 );
 
 CREATE TABLE Conhece (
-	Login1 VARCHAR(30) NULL,
-	Login2 VARCHAR(30) NULL,
+	Login1 VARCHAR(30) NOT NULL,
+	Login2 VARCHAR(30) NOT NULL,
 	PRIMARY KEY(Login1, Login2),
 	FOREIGN KEY(Login1)
 		REFERENCES Usuario(Login)
@@ -20,8 +20,8 @@ CREATE TABLE Conhece (
 );
 
 CREATE TABLE Bloqueia (
-	Login1 VARCHAR(30) NULL,
-	Login2 VARCHAR(30) NULL,
+	Login1 VARCHAR(30) NOT NULL,
+	Login2 VARCHAR(30) NOT NULL,
 	PRIMARY KEY(Login1, Login2),
 	FOREIGN KEY(Login1)
 		REFERENCES Usuario(Login)
@@ -41,7 +41,7 @@ CREATE TABLE Elenco (
 );
 
 CREATE TABLE Diretor (
-	Id_Elenco INTEGER NULL,
+	Id_Elenco INTEGER NOT NULL,
 	PRIMARY KEY(Id_Elenco),
 	FOREIGN KEY(Id_Elenco)
 		REFERENCES Elenco(Id_Elenco)
@@ -50,7 +50,7 @@ CREATE TABLE Diretor (
 );
 
 CREATE TABLE Ator (
-	Id_Elenco INTEGER NULL,
+	Id_Elenco INTEGER NOT NULL,
 	PRIMARY KEY(Id_Elenco),
 	FOREIGN KEY(Id_Elenco)
 		REFERENCES Elenco(Id_Elenco)
@@ -59,8 +59,8 @@ CREATE TABLE Ator (
 );
 
 CREATE TABLE Atua (
-	Id_Elenco INTEGER NULL,
-	Id_Filme INTEGER NULL,
+	Id_Elenco INTEGER NOT NULL,
+	Id_Filme INTEGER NOT NULL,
 	PRIMARY KEY(Id_Elenco,Id_Filme),
 	FOREIGN KEY(Id_Elenco)
 		REFERENCES Ator(Id_Elenco)
@@ -73,8 +73,8 @@ CREATE TABLE Atua (
 );
 
 CREATE TABLE GostaFilme (
-	Login VARCHAR(30) NULL,
-	Id_Filme INTEGER NULL,
+	Login VARCHAR(30) NOT NULL,
+	Id_Filme INTEGER NOT NULL,
 	PRIMARY KEY(Login, Id_Filme),
 	FOREIGN KEY(Login)
 		REFERENCES Usuario(Login)
@@ -87,9 +87,9 @@ CREATE TABLE GostaFilme (
 );
 
 CREATE TABLE GostaArtista (
-	Login VARCHAR(30) NULL,
-	Nome_Artista VARCHAR(30) NULL,
-	Nota INTEGER NULL,
+	Login VARCHAR(30) NOT NULL,
+	Nome_Artista VARCHAR(30) NOT NULL,
+	Nota INTEGER NOT NULL,
 	PRIMARY KEY(Login, Nome_Artista),
 	FOREIGN KEY(Login)
 		REFERENCES Usuario(Login)
@@ -97,24 +97,6 @@ CREATE TABLE GostaArtista (
 			ON UPDATE NO ACTION,
 	FOREIGN KEY(Nome_Artista)
 		REFERENCES Artista(Nome_Artista)
-			ON DELETE SET NULL
-			ON UPDATE NO ACTION
-);
-
-
-
-# para testar
-CREATE TABLE Artista (
-	Nome_Artista VARCHAR(30) NOT NULL,
-	PRIMARY KEY(Nome_Artista)
-);
-
-CREATE TABLE Filme (
-	Id_Filme INTEGER NOT NULL,
-	Id_Diretor INTEGER NULL,
-	PRIMARY KEY(Id_Filme),
-	FOREIGN KEY(Id_Diretor)
-		REFERENCES Diretor(Id_Elenco)
 			ON DELETE SET NULL
 			ON UPDATE NO ACTION
 );

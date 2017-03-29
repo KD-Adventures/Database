@@ -6,16 +6,10 @@ CREATE TABLE Artista (
 	PRIMARY KEY (Id_Artista)
 );
 
-CREATE TABLE Musico (
-	Nome_Real VARCHAR(30) NOT NULL,
-	Estilo_Musical VARCHAR(30) NOT NULL,
-	Nascimento VARCHAR(30) NOT NULL,
-	PRIMARY KEY (Nome_Real)
-);
 
 CREATE TABLE Cantor (
-	Id_Artista INTEGER NOT NULL,
-	Nome_Real VARCHAR(30) NOT NULL,
+	Id_Artista INTEGER NULL,
+	Nome_Musico VARCHAR(30) NOT NULL,
 	Estilo_Musical VARCHAR(30) NOT NULL,
 	Nascimento VARCHAR(30) NOT NULL,
 	PRIMARY KEY (Id_Artista),
@@ -36,14 +30,14 @@ CREATE TABLE Banda (
 
 CREATE TABLE Composta(
 	Id_Artista INTEGER NOT NULL,
-	Nome_Real VARCHAR(30) NOT NULL,
-	PRIMARY KEY (Id_Artista, Nome_Real),
+	Nome_Musico VARCHAR(30) NOT NULL,
+	PRIMARY KEY (Id_Artista, Nome_Musico),
 	FOREIGN KEY (Id_Artista)
-		REFERENCES Artista(Id_Artista)
+		REFERENCES Banda(Id_Artista)
 			ON UPDATE NO ACTION
 			ON DELETE SET NULL,
-	FOREIGN KEY (Nome_Real)
-		REFERENCES Musico(Nome_Real)
+	FOREIGN KEY (Nome_Musico)
+		REFERENCES Cantor(Nome_Musico)
 			ON UPDATE NO ACTION
 			ON DELETE SET NULL
 );
