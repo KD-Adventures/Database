@@ -1,0 +1,49 @@
+CREATE TABLE Artista (
+	Id_Artista INTEGER NOT NULL,
+	Nome_Artistico VARCHAR(30) NOT NULL,
+	Pais VARCHAR(30) NOT NULL,
+	Genero VARCHAR(30) NOT NULL,
+	PRIMARY KEY (Id_Artista)
+);
+
+CREATE TABLE Musico (
+	Nome_Real VARCHAR(30) NOT NULL,
+	Estilo_Musical VARCHAR(30) NOT NULL,
+	Nascimento VARCHAR(30) NOT NULL,
+	PRIMARY KEY (Nome_Real)
+);
+
+CREATE TABLE Cantor (
+	Id_Artista INTEGER NOT NULL,
+	Nome_Real VARCHAR(30) NOT NULL,
+	Estilo_Musical VARCHAR(30) NOT NULL,
+	Nascimento VARCHAR(30) NOT NULL,
+	PRIMARY KEY (Id_Artista),
+	FOREIGN KEY (Id_Artista)
+		REFERENCES Artista(Id_Artista)
+			ON UPDATE NO ACTION
+			ON DELETE CASCADE,
+);
+
+CREATE TABLE Banda (
+	Id_Artista INTEGER NOT NULL,
+	PRIMARY KEY (Id_Artista),
+	FOREIGN KEY (Id_Artista)
+		REFERENCES Artista(Id_Artista)
+			ON UPDATE NO ACTION
+			ON DELETE CASCADE
+);
+
+CREATE TABLE Composta(
+	Id_Artista INTEGER NOT NULL,
+	Nome_Real VARCHAR(30) NOT NULL,
+	PRIMARY KEY (Id_Artista, Nome_Real),
+	FOREIGN KEY (Id_Artista)
+		REFERENCES Artista(Id_Artista)
+			ON UPDATE NO ACTION
+			ON DELETE SET NULL,
+	FOREIGN KEY (Nome_Real)
+		REFERENCES Musico(Nome_Real)
+			ON UPDATE NO ACTION
+			ON DELETE SET NULL
+);
