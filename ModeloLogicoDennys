@@ -1,0 +1,36 @@
+CREATE TABLE Filme(
+	Id_Filme VARCHAR(4) NOT NULL,
+	Nome VARCHAR(30) NOT NULL,
+	Lançamento VARCHAR(10) NOT NULL,
+	PRIMARY KEY(Id_Filme)
+);
+
+CREATE TABLE Categoria(
+	Nome_Categoria VARCHAR(30) NOT NULL,
+	PRIMARY KEY(Nome_Categoria)
+);
+
+CREATE TABLE Subordinada(
+	Nome_Categoria VARCHAR(30) NOT NULL,
+	Nome_Supercategoria VARCHAR(30) NOT NULL,
+	PRIMARY KEY (Nome_Categoria, 
+Nome_Supercategoria),
+	FOREIGN KEY(Nome_Supercategoria)
+		REFERENCES Categoria(Nome_categoria)
+			ON DELETE NO ACTION
+			ON UPDATE NO ACTION
+);
+
+CREATE TABLE Pertence(
+	Id_Filme VARCHAR(4) NOT NULL,
+	Nome_Categoria VARCHAR(30) NOT NULL,
+	PRIMARY KEY (Id_Filme, Nome_Categoria),
+	FOREIGN KEY(Id_Filme)
+		REFERENCES Filme(Id_Filme)
+			ON DELETE NO ACTION
+			ON UPDATE NO ACTION,
+	FOREIGN KEY (Nome_Categoria)
+		REFERENCES Categoria(Nome_Categoria)
+			ON DELETE NO ACTION
+			ON UPDATE NO ACTION
+);
