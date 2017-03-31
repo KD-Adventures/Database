@@ -65,6 +65,9 @@ CREATE TABLE Elenco (
 INSERT INTO Elenco VALUES ('john apple', 65132, 'rua margarida');
 INSERT INTO Elenco VALUES ('mary orange', 156316, 'avenida das dores');
 INSERT INTO Elenco VALUES ('morgan freeman', 8744, 'travessa antonio moura');
+INSERT INTO Elenco VALUES ('gilberto Almeida', 8794, 'travessa dos caipiras');
+INSERT INTO Elenco VALUES ('will Smith', 9244, 'rua dos mortos');
+INSERT INTO Elenco VALUES ('rubens Leite', 8654, 'rua solidao');
 
 
 CREATE TABLE Diretor (
@@ -77,6 +80,9 @@ CREATE TABLE Diretor (
 );
 
 INSERT INTO Diretor VALUES ('john apple');
+INSERT INTO Diretor VALUES ('gilberto Almeida');
+INSERT INTO Diretor VALUES ('rubens Leite');
+
 
 
 CREATE TABLE Ator (
@@ -90,6 +96,7 @@ CREATE TABLE Ator (
 
 INSERT INTO Ator VALUES ('mary orange');
 INSERT INTO Ator VALUES ('morgan freeman');
+INSERT INTO Ator VALUES ('will Smith');
 
 
 CREATE TABLE Filme(
@@ -158,6 +165,14 @@ CREATE TABLE Categoria(
 	PRIMARY KEY(Nome_Categoria)
 );
 
+INSERT INTO Categoria VALUES ('Terror');
+INSERT INTO Categoria VALUES ('Ficção');
+INSERT INTO Categoria VALUES ('Comedia');
+INSERT INTO Categoria VALUES ('Romance');
+INSERT INTO Categoria VALUES ('Fantasia');
+INSERT INTO Categoria VALUES ('Suspense');
+
+
 CREATE TABLE Subordinada(
 	Nome_Categoria VARCHAR(30) NOT NULL,
 	Nome_Supercategoria VARCHAR(30) NOT NULL,
@@ -171,6 +186,11 @@ CREATE TABLE Subordinada(
 			ON DELETE NO ACTION
 			ON UPDATE NO ACTION
 );
+
+INSERT INTO Categoria VALUES ('Romance', 'Comedia');
+INSERT INTO Categoria VALUES ('Ficção', 'Terror');
+INSERT INTO Categoria VALUES ('Suspense', 'Fantasia');
+
 
 CREATE TABLE Pertence(
 	Id_Filme VARCHAR(4) NOT NULL,
@@ -186,6 +206,14 @@ CREATE TABLE Pertence(
 			ON UPDATE NO ACTION
 );
 
+INSERT INTO Pertence VALUES ('abcd', 'Fantasia');
+INSERT INTO Pertence VALUES ('abcd', 'Terror');
+INSERT INTO Pertence VALUES ('dfas', 'Comedia');
+INSERT INTO Pertence VALUES ('dfas', 'Fantasia');
+INSERT INTO Pertence VALUES ('axdf', 'Comedia'
+INSERT INTO Pertence VALUES ('axdf', 'Ficção');
+
+
 CREATE TABLE Artista (
 	Id_Artista INTEGER NOT NULL,
 	Nome_Artistico VARCHAR(30) NOT NULL,
@@ -193,6 +221,13 @@ CREATE TABLE Artista (
 	Genero VARCHAR(30) NOT NULL,
 	PRIMARY KEY (Id_Artista)
 );
+
+INSERT INTO Artista VALUES (`1`,`FranCisco`,`Brasil`,`Sertanejo`);
+INSERT INTO Artista VALUES (`2`,`Ivan`,`Russia`,`Rock`);
+INSERT INTO Artista VALUES (`3`,`Tres Menos Um`,`Argentina`,`Pop`);
+INSERT INTO Artista VALUES ('4', 'Os malditos', 'Estados Unidos', 'Funk');
+INSERT INTO Artista VALUES ('5', 'Sono', 'India', 'Gospel');
+
 
 CREATE TABLE Cantor (
 	Id_Artista INTEGER NULL,
@@ -206,6 +241,15 @@ CREATE TABLE Cantor (
 			ON DELETE CASCADE,
 );
 
+INSERT INTO Cantor VALUES ('1', 'Francisco da Silva','Sertanejo','22/12/1980');
+INSERT INTO Cantor VALUES ('2', 'Ivanilson', 'Rock', '02/02/1982');
+INSERT INTO Cantor VALUES (NULL, 'Geraldo', 'Rock', '17/07/1987');
+INSERT INTO Cantor VALUES (NULL, 'Caio', 'Rock', '30/06/1979');
+INSERT INTO Cantor VALUES (NULL, 'Mike', 'Funk', '12/09/1983');
+INSERT INTO Cantor VALUES (NULL, 'Pedro', 'Funk', '01/01/1981');
+INSERT INTO Cantor VALUES (NULL, 'Ricardo', 'Gospel', '03/06/1989');
+INSERT INTO Cantor VALUES (NULL, 'Daniel', 'Gospel', '4/08/1982');
+
 CREATE TABLE Banda (
 	Id_Artista INTEGER NOT NULL,
 	PRIMARY KEY (Id_Artista),
@@ -214,6 +258,10 @@ CREATE TABLE Banda (
 			ON UPDATE NO ACTION
 			ON DELETE CASCADE
 );
+
+INSERT INTO Banda VALUES ('3');
+INSERT INTO Banda VALUES ('4');
+INSERT INTO Banda VALUES ('5');
 
 CREATE TABLE Composta(
 	Id_Artista INTEGER NOT NULL,
@@ -229,6 +277,13 @@ CREATE TABLE Composta(
 			ON DELETE SET NULL
 );
 
+INSERT INTO Composta VALUES ('3','Geraldo');
+INSERT INTO Composta VALUES ('3','Caio');
+INSERT INTO Composta VALUES ('4','Mike');
+INSERT INTO Composta VALUES ('4','Pedro');
+INSERT INTO Composta VALUES ('5','Ricardo');
+INSERT INTO Composta VALUES ('5','Daniel');
+
 CREATE TABLE GostaArtista (
 	Login VARCHAR(30) NOT NULL,
 	Id_Artista INTEGER NOT NULL,
@@ -243,3 +298,10 @@ CREATE TABLE GostaArtista (
 			ON DELETE SET NULL
 			ON UPDATE NO ACTION
 );
+
+INSERT INTO GostaArtista VALUES ('joaquim', '1', '5');
+INSERT INTO GostaArtista VALUES ('joaquim', '5', '4');
+INSERT INTO GostaArtista VALUES ('constantino', '2', '5');
+INSERT INTO GostaArtista VALUES ('constantino', '1', '5');
+INSERT INTO GostaArtista VALUES ('gertrude', '4', '3');
+INSERT INTO GostaArtista VALUES ('gertrude', '3', '5');
