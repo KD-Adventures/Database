@@ -162,11 +162,11 @@ INSERT INTO GostaFilme VALUES ('constantino', 'axdf');
 
 CREATE TABLE Categoria(
 	Nome_Categoria VARCHAR(30) NOT NULL,
-	PRIMARY KEY(Nome_Categoria)
 );
 
+
 INSERT INTO Categoria VALUES ('Terror');
-INSERT INTO Categoria VALUES ('Ficção');
+INSERT INTO Categoria VALUES ('Ficcao');
 INSERT INTO Categoria VALUES ('Comedia');
 INSERT INTO Categoria VALUES ('Romance');
 INSERT INTO Categoria VALUES ('Fantasia');
@@ -176,20 +176,17 @@ INSERT INTO Categoria VALUES ('Suspense');
 CREATE TABLE Subordinada(
 	Nome_Categoria VARCHAR(30) NOT NULL,
 	Nome_Supercategoria VARCHAR(30) NOT NULL,
-	PRIMARY KEY (Nome_Categoria, Nome_Supercategoria),
-	FOREIGN KEY (Nome_Categoria)
+	PRIMARY KEY (Nome_Categoria),
+	FOREIGN KEY (Nome_Supercategoria)
 		REFERENCES Categoria(Nome_Categoria)
 			ON DELETE NO ACTION
 			ON UPDATE NO ACTION,
-	FOREIGN KEY(Nome_Supercategoria)
-		REFERENCES Categoria(Nome_categoria)
-			ON DELETE NO ACTION
-			ON UPDATE NO ACTION
 );
 
-INSERT INTO Categoria VALUES ('Romance', 'Comedia');
-INSERT INTO Categoria VALUES ('Ficção', 'Terror');
-INSERT INTO Categoria VALUES ('Suspense', 'Fantasia');
+INSERT INTO Subordinada VALUES ('Romance', 'Comedia');
+INSERT INTO Subordinada VALUES ('Ficcao', 'Terror');
+INSERT INTO Subordinada VALUES ('Suspense', 'Fantasia');
+
 
 
 CREATE TABLE Pertence(
@@ -210,8 +207,8 @@ INSERT INTO Pertence VALUES ('abcd', 'Fantasia');
 INSERT INTO Pertence VALUES ('abcd', 'Terror');
 INSERT INTO Pertence VALUES ('dfas', 'Comedia');
 INSERT INTO Pertence VALUES ('dfas', 'Fantasia');
-INSERT INTO Pertence VALUES ('axdf', 'Comedia'
-INSERT INTO Pertence VALUES ('axdf', 'Ficção');
+INSERT INTO Pertence VALUES ('axdf', 'Comedia');
+INSERT INTO Pertence VALUES ('axdf', 'Ficcao');
 
 
 CREATE TABLE Artista (
@@ -222,15 +219,22 @@ CREATE TABLE Artista (
 	PRIMARY KEY (Id_Artista)
 );
 
-INSERT INTO Artista VALUES (`1`,`FranCisco`,`Brasil`,`Sertanejo`);
-INSERT INTO Artista VALUES (`2`,`Ivan`,`Russia`,`Rock`);
-INSERT INTO Artista VALUES (`3`,`Tres Menos Um`,`Argentina`,`Pop`);
+INSERT INTO Artista VALUES ('1','FranCisco','Brasil','Sertanejo');
+INSERT INTO Artista VALUES ('2','Ivan','Russia','Rock');
+INSERT INTO Artista VALUES ('3','Tres Menos Um','Argentina','Pop');
 INSERT INTO Artista VALUES ('4', 'Os malditos', 'Estados Unidos', 'Funk');
 INSERT INTO Artista VALUES ('5', 'Sono', 'India', 'Gospel');
+INSERT INTO Artista VALUES ('6', 'Geraldo', 'Argentina', 'Rock');
+INSERT INTO Artista VALUES ('7', 'Caio', 'Argentina', 'Rock');
+INSERT INTO Artista VALUES ('8', 'Mike', 'Estados Unidos', 'Funk', );
+INSERT INTO Artista VALUES ('9', 'Pedro', 'Estados Unidos', 'Funk', );
+INSERT INTO Artista VALUES ('10', 'Ricardo', 'India', 'Gospel', );
+INSERT INTO Artista VALUES ('11', 'Daniel', 'India', 'Gospel', );
+
 
 
 CREATE TABLE Cantor (
-	Id_Artista INTEGER NULL,
+	Id_Artista INTEGER NOT NULL,
 	Nome_Musico VARCHAR(30) NOT NULL,
 	Estilo_Musical VARCHAR(30) NOT NULL,
 	Nascimento VARCHAR(30) NOT NULL,
@@ -243,12 +247,12 @@ CREATE TABLE Cantor (
 
 INSERT INTO Cantor VALUES ('1', 'Francisco da Silva','Sertanejo','22/12/1980');
 INSERT INTO Cantor VALUES ('2', 'Ivanilson', 'Rock', '02/02/1982');
-INSERT INTO Cantor VALUES (NULL, 'Geraldo', 'Rock', '17/07/1987');
-INSERT INTO Cantor VALUES (NULL, 'Caio', 'Rock', '30/06/1979');
-INSERT INTO Cantor VALUES (NULL, 'Mike', 'Funk', '12/09/1983');
-INSERT INTO Cantor VALUES (NULL, 'Pedro', 'Funk', '01/01/1981');
-INSERT INTO Cantor VALUES (NULL, 'Ricardo', 'Gospel', '03/06/1989');
-INSERT INTO Cantor VALUES (NULL, 'Daniel', 'Gospel', '4/08/1982');
+INSERT INTO Cantor VALUES ('6', 'Geraldo', 'Rock', '17/07/1987');
+INSERT INTO Cantor VALUES ('7', 'Caio', 'Rock', '30/06/1979');
+INSERT INTO Cantor VALUES ('8', 'Mike', 'Funk', '12/09/1983');
+INSERT INTO Cantor VALUES ('9', 'Pedro', 'Funk', '01/01/1981');
+INSERT INTO Cantor VALUES ('10', 'Ricardo', 'Gospel', '03/06/1989');
+INSERT INTO Cantor VALUES ('11', 'Daniel', 'Gospel', '4/08/1982');
 
 CREATE TABLE Banda (
 	Id_Artista INTEGER NOT NULL,
