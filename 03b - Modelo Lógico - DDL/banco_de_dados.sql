@@ -160,33 +160,22 @@ INSERT INTO GostaFilme VALUES ('constantino', 'dfas');
 INSERT INTO GostaFilme VALUES ('constantino', 'axdf');
 
 
-CREATE TABLE Categoria(
-	Nome_Categoria VARCHAR(30) NOT NULL,
-);
-
-
-INSERT INTO Categoria VALUES ('Terror');
-INSERT INTO Categoria VALUES ('Ficcao');
-INSERT INTO Categoria VALUES ('Comedia');
-INSERT INTO Categoria VALUES ('Romance');
-INSERT INTO Categoria VALUES ('Fantasia');
-INSERT INTO Categoria VALUES ('Suspense');
-
-
 CREATE TABLE Subordinada(
 	Nome_Categoria VARCHAR(30) NOT NULL,
-	Nome_Supercategoria VARCHAR(30) NOT NULL,
+	Nome_Supercategoria VARCHAR(30) NULL,
 	PRIMARY KEY (Nome_Categoria),
 	FOREIGN KEY (Nome_Supercategoria)
-		REFERENCES Categoria(Nome_Categoria)
+		REFERENCES Subordinada(Nome_Categoria)
 			ON DELETE NO ACTION
 			ON UPDATE NO ACTION,
 );
 
-INSERT INTO Subordinada VALUES ('Romance', 'Comedia');
-INSERT INTO Subordinada VALUES ('Ficcao', 'Terror');
-INSERT INTO Subordinada VALUES ('Suspense', 'Fantasia');
-
+INSERT INTO Subordinada VALUES ('Ficcao', NULL);
+INSERT INTO Subordinada VALUES ('Terror', 'Ficcao');
+INSERT INTO Subordinada VALUES ('Suspense', 'Ficcao');
+INSERT INTO Subordinada VALUES ('Comedia', NULL);
+INSERT INTO Subordinada VALUES ('Comedia romantica', 'Comedia');
+INSERT INTO Subordinada VALUES ('Fantasia', 'Ficcao');
 
 
 CREATE TABLE Pertence(
@@ -198,7 +187,7 @@ CREATE TABLE Pertence(
 			ON DELETE NO ACTION
 			ON UPDATE NO ACTION,
 	FOREIGN KEY (Nome_Categoria)
-		REFERENCES Categoria(Nome_Categoria)
+		REFERENCES Subordinada(Nome_Categoria)
 			ON DELETE NO ACTION
 			ON UPDATE NO ACTION
 );
