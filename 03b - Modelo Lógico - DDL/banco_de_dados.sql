@@ -141,6 +141,7 @@ INSERT INTO Atua VALUES ('morgan freeman', 'axdf');
 CREATE TABLE GostaFilme (
 	Login VARCHAR(30) NOT NULL,
 	Id_Filme VARCHAR(4) NOT NULL,
+	Nota Integer NOT NULL,
 	PRIMARY KEY(Login, Id_Filme),
 	FOREIGN KEY(Login)
 		REFERENCES Usuario(Login)
@@ -152,12 +153,12 @@ CREATE TABLE GostaFilme (
 			ON UPDATE NO ACTION
 );
 
-INSERT INTO GostaFilme VALUES ('joaquim', 'axdf');
-INSERT INTO GostaFilme VALUES ('joaquim', 'abcd');
-INSERT INTO GostaFilme VALUES ('gertrude', 'dfas');
-INSERT INTO GostaFilme VALUES ('gertrude', 'abcd');
-INSERT INTO GostaFilme VALUES ('constantino', 'dfas');
-INSERT INTO GostaFilme VALUES ('constantino', 'axdf');
+INSERT INTO GostaFilme VALUES ('joaquim', 'axdf', 3);
+INSERT INTO GostaFilme VALUES ('joaquim', 'abcd', 4);
+INSERT INTO GostaFilme VALUES ('gertrude', 'dfas', 4);
+INSERT INTO GostaFilme VALUES ('gertrude', 'abcd', 3);
+INSERT INTO GostaFilme VALUES ('constantino', 'dfas', 5);
+INSERT INTO GostaFilme VALUES ('constantino', 'axdf', 4);
 
 
 CREATE TABLE Subordinada(
