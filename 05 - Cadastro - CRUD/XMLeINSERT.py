@@ -6,6 +6,11 @@ import urllib2
 
 import sqlite3
 
+banco = sqlite3.connect("rede.db")
+cursor = banco.cursor()
+
+
+
 locais = []
 # abre o txt que armazena o link para os arquivos xml
 arquivos = open("locais.txt")
@@ -70,7 +75,7 @@ def extraiDados(dados):
     return dados
 
 
-def inserir(dados, entidade, arquivo):
+def inserir(dados, entidade):
 	
 	# cria a string
 	string = "INSERT OR IGNORE INTO " + entidade + " VALUES ('"
@@ -89,18 +94,13 @@ def inserir(dados, entidade, arquivo):
 	# fecha o comando de sql
 	string += ");\n"
 	
-	# salva o comando no arquivo
-	arquivo.write(string)
+
+	# executa o comando SQL
+	cursor.execute(string)
 
 
 def getData(root, tag):
     
-	
-    # nome do arquivo que sera salvo
-	salvarEm = tag[0] + ".sql"
-
-	# abre um arquivo com o nome definido acima em modo de escrita
-	file = open(salvarEm, "w")
         
     # para todo elemento com a tag[1]
 	for child in root.findall(tag[1]):
@@ -143,9 +143,7 @@ def getData(root, tag):
 					# coloca na ultima posicao do vetor elementos
 					elementos.append(i)
 			
-		inserir(elementos, tag[0], file)
-
-	file.close()
+		inserir(elementos, tag[0])
 
 # for de 0 ate numero de locais
 for index in range(len(locais)):
@@ -163,7 +161,6 @@ for index in range(len(locais)):
 	for atributo in tags:
 		# se a tag do child de root for igual ao atributo
 		if root[0].tag == atributo[1]:
-			print "Criando " + atributo[0]
 			if atributo[0] == 'Filme':
 				print "Extraindo titulo do IMDB (demora um pouco)"
 			getData(root, atributo)
@@ -171,3 +168,6 @@ for index in range(len(locais)):
     # fecha o arquivo xml
 	local.close
     
+
+# transforma as alteracoes no banco em permanentes
+banco.commit()
