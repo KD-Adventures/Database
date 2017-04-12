@@ -95,38 +95,55 @@ def inserir(entidade):
 		putOnDataBase(string)
 	
 
+
+def putOnDataBaseTuple(codigo,tuples):
+
+	cursor.execute(codigo,tuples)
+	# submete o codigo ao banco de dados
+	banco.commit()
+
+
 def editar(usuario):
 
 
 	cursor.row_factory = sqlite3.Row
-	table = cursor.execute("SELECT * FROM " +  "Usuario" + ";")
+	table = cursor.execute("SELECT * FROM Usuario;")
 	# pega o nome das colunas
 	nomeColunas = table.fetchone().keys()
 	
-	elementos = toArray(getElements("*", "Usuario", " Usuario.Login = '" + usuario + "'"))
+	elementos = toArray(getElements("*", "Usuario", " Usuario.Login = '{}'".format(usuario)))
 
+	dados = []
+	
 	print "\n"
 	for i in range(len(elementos)):
-		print nomeColunas[i] + ": " + elementos[i]
+		# formata a string, coloca nomeColunas[i] na primeira chave, e elementos[i] na segunda
+		print "{} : {}".format(nomeColunas[i],elementos[i])
+		dados.append(elementos[i])
 	
 
 	campoExiste = False
 	while not campoExiste: 
 		campoModificado = raw_input("\nDigite o nome do campo a ser atualizado ou 1 - para cancelar:\n>> ")
 
-		if input == "1":
+		if campoModificado == "1":
 			return
 
 		campoExiste = False
 		for i in nomeColunas:
+
 			if campoModificado == i:
-				novoValor = raw_input("\nDigite " + i + ":\n>> ")
+				valorNovo = raw_input("\nDigite " + i + ":\n>> ")
 				campoExiste = True
-				novo = input
-				dadoAtual = elementos[nomeColunas.index(i)]
-				string = "UPDATE Usuario SET Usuario." + campoModificado + "= '" + novoValor + "' WHERE Usuario." + campoModificado + "= '" + dadoAtual + "';"
-				print string
-				#putOnDataBase(string)
+
+				indexModificado = nomeColunas.index(i)
+				valorAtual = dados[indexModificado]
+				dados[indexModificado] = valorNovo
+
+				putOnDataBaseTuple("REPLACE INTO Usuario VALUES (?,?,?);", tuple(dados))
+
+		print("\nCampo Inexistente\n")
+
 
 
 def getElements(dado, entidade, condicao):
@@ -137,11 +154,76 @@ def getElements(dado, entidade, condicao):
 		return getFromDataBase("SELECT " + dado + " FROM " + entidade + " Where " + condicao + ";")
 
 
+
+def printRelacionamentos(usuario):
+	print "\n\n " + usuario + " conhece os seguintes usuarios: \n"
+	table = getElements("Conhece.Login2", "Conhece", "Conhece.Login1 = '" + usuario + "'")
+	imprimir(table)
+
+
+def addRelacionamento(usuario1):
+	
+	while True:
+		usuario2 = raw_input("\nQuem " + usuario1 + " conhece? (digite 1 para voltar para a pagina inicial)\n>>")
+
+		if input == "1":
+			return
+		
+		if not checkIfExist("Usuario.Login", "Usuario", "Usuario.Login = '" + usuario2 + "'"):
+			print "\nEsse usuario nao existe\n"
+			continue
+
+		if checkIfExist("Conhece.Login2", "Conhece", "Conhece.Login1 = '" + usuario1 + "' AND Conhece.Login2 = '" + usuario2 + "'"):
+			print "\nEsse relacionamento ja foi cadastrado\n"
+			continue
+
+		cursor.execute("INSERT INTO Conhece VALUES ('" + usuario1 + "', '" + usuario2 + "');")
+		return
+
+
+
+def relacionamentos():
+	input = raw_input("\nDigite: \n1 - Para verificar relacionamentos de um usuario \n2 - Para adicionar relacionamentos de um usuario \n3 - Para voltar para a pagina inicial \n>> ")
+
+	digitoValido = False
+	while not digitoValido:
+
+		if input == "1" or input == "2":
+			existente = False
+			digitoValido = True
+
+			while not existente:
+				usuario = raw_input("\nDigite: \nO login do usuario ou\n1 - para retornar a pagina inicial:\n>> ")
+				
+				if usuario == "1":
+					return
+
+				existente = checkIfExist("Usuario.Login", "Usuario", "Usuario.Login = '" + usuario + "'")
+
+				if not existente:
+					print "\nUsuario nao existente\n"
+					continue
+
+				if input == "1":
+					printRelacionamentos(usuario)
+
+				else:
+					addRelacionamento(usuario)
+
+		elif input == "3":
+			return
+
+		else:
+			input = raw_input("Digito invalido\nDigite: \n1 - Para verificar relacionamentos de um usuario \n2 - Para adicionar relacionamentos de um usuario \n3 - Para voltar para a pagina inicial \n>> ")
+
+
+
+
 def listar(dado, entidade, condicao):
 
 	imprimir(getElements(dado, entidade, condicao))
 
-	input = raw_input("\nDigite: \n1 - Para Apagar um usuario \n2 - Para Editar um usuario \n3 - Para voltar para a pagina inicial \n>> ")
+	input = raw_input("\nDigite: \n1 - Para Apagar um usuario \n2 - Para Editar um usuario \n3 - Para editar relacionamentos \n4 - Para voltar para a pagina inicial \n>> ")
 
 	digitoValido = False
 	while not digitoValido:
@@ -172,9 +254,13 @@ def listar(dado, entidade, condicao):
 
 		elif input == "3":
 			digitoValido = True
+			relacionamentos()
+
+		elif input == "4":
+			digitoValido = True
 		
 		else:
-			input = raw_input("Digito invalido\nDigite: \n1 - Para Apagar um usuario \n2 - Para Editar um usuario \n3 - Para voltar para a pagina inicial \n>> ")
+			input = raw_input("Digito invalido\nDigite: \n1 - Para Apagar um usuario \n2 - Para Editar um usuario \n3 - Para editar relacionamentos \n4 - Para voltar para a pagina inicial \n>> ")
 
 
 def inicial():

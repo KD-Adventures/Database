@@ -2,4 +2,3 @@ o arquivo "criarBanco.py" cria um banco de dados, que é o ja existente rede.bd,
 O arquivo "XMLeINSERT.py" é uma modificação do presente na tarefa 04. Ao invés de escrever em arquivos, insere no banco de dados rede.bd.
 O arquivo locais.txt indica onde estão os arquivos xml para a extração dos dados
 O arquivo interface.py implementa a interface para manipulação do banco de dados.
-Informações sobre o que falta fazer estão em TODO
