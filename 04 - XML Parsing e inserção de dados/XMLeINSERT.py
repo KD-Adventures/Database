@@ -8,7 +8,7 @@ import sqlite3
 
 locais = []
 # abre o txt que armazena o link para os arquivos xml
-arquivos = open("locais.txt")
+arquivos = open("readme.txt")
 # para cada linha no arquivo
 for linha in arquivos:
 	# adiciona a linha na proxima posicao vazia da lista
