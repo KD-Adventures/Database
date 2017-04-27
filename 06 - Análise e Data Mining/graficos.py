@@ -45,11 +45,13 @@ def dadosGraficos(dados, xlabel, ylabel, tam):
 	x_inf = []#lista para armazenar dados do eixo x
 	y_inf = []#lista para armazenar dados do eixo y
 	i=0 
+	x_inf.append(linha[0])
+	y_inf.append(linha[1])	
 	for linha in cursor:
 		x_inf.append(linha[0])
 		y_inf.append(linha[1])	
 		i+= 1
-		if i==tam:#numero de dados a ser mostrado no grafico
+		if i==tam-1:#numero de dados a ser mostrado no grafico
 			break
 	gerarGrafico(x_inf,y_inf,xlabel, ylabel,tam)
 
