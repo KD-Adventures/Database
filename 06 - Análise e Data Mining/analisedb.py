@@ -15,6 +15,20 @@ def imprime(dado):
 		print(i)
 
 
+def imprimeLista(dados):
+	array = []
+	
+	for i in dados:
+		string = ""
+		semVirgula = True
+		for j in i:
+			if semVirgula == True:
+				string = "(" + string + str(j)
+				semVirgula = False
+			else:
+				string = string + ", " + str(j)
+		string = string + ")"
+		print(string)
 
 
 #1
@@ -144,8 +158,7 @@ def view():
 						SELECT * FROM ConheceNormalizada;
 						'''
 					)
-	for i in cursor.fetchall():
-		print(i)
+	imprimeLista(cursor.fetchall())
 
 
 def gostaMesmoFilme():
@@ -169,8 +182,7 @@ def gostaMesmoFilme():
 						"""
 					)
 
-	for i in cursor.fetchall():
-		print(i)
+	imprimeLista(cursor.fetchall())
 
 
 def conhecidosDosConhecidos():
@@ -193,11 +205,11 @@ def conhecidosDosConhecidos():
 							ORDER BY ConheceNormalizada.Login1 ASC;
 						"""
 					)
-	for i in cursor.fetchall():
-		print(i)
+	imprimeLista(cursor.fetchall())
 
 
 def artistasMaisCurtidos():
+	print('Artistam mais gostados')
 	executar("""SELECT
 			URI_Artista,
 			COUNT(Login) AS Gostam
@@ -206,6 +218,7 @@ def artistasMaisCurtidos():
 		""")
 
 def filmesMaisCurtidos():
+	print('Filmes mais gostados')
 	executar("""SELECT 
 			URI_filme, 
 			COUNT(Login) AS gostam 
@@ -213,6 +226,7 @@ def filmesMaisCurtidos():
 			GROUP BY URI_Filme ORDER BY gostam DESC
 		""")
 def pessoasQueMaisGostaramFilmes():
+	print('Pessoas que mais gostaram de filmes')
 	executar("""SELECT 
 			Login, 
 			COUNT(URI_filme) AS gosta 
@@ -221,6 +235,7 @@ def pessoasQueMaisGostaramFilmes():
 		""")
 
 def pessoasQueMaisGostaramArtistas():
+	print('Pessoas que mais gostaram de Artistas')
 	executar("""SELECT 
 			Login,
 			COUNT(URI_Artista) AS Gosta
@@ -288,18 +303,20 @@ raw_input('Aperte enter para continuar\n')
 clear()
 conhecidosDosConhecidos()
 
-print('Artistam mais gostados')
+raw_input('Aperte enter para continuar\n')
+clear()
 dadosGraficos(artistasMaisCurtidos,'Artista Musical','Pessoas', 10)
+
 raw_input('Aperte enter para continuar\n')
 clear()
-print('Filmes mais gostados')
 dadosGraficos(filmesMaisCurtidos,'Filmes','Pessoas', 10)
+
 raw_input('Aperte enter para continuar\n')
 clear()
-print('Pessoas que mais gostaram de filmes')
 dadosGraficos(pessoasQueMaisGostaramFilmes,'Pessoas','Numero de Filmes', 10)
+
 raw_input('Aperte enter para continuar\n')
 clear()
-print('Pessoas que mais gostaram de Artistas')
 dadosGraficos(pessoasQueMaisGostaramArtistas,'Pessoas','Numero de Artistas', 10)
-clear()
+
+raw_input('Aperte enter para continuar\n')
