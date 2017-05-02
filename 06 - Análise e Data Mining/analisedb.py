@@ -210,38 +210,41 @@ def conhecidosDosConhecidos():
 
 def artistasMaisCurtidos():
 	print('Artistam mais gostados')
-	executar("""SELECT
-			URI_Artista,
-			COUNT(Login) AS Gostam
-			FROM GostaArtista
-			GROUP BY URI_Artista order by Gostam DESC;
-		""")
+	executar("""
+				SELECT Artista.Nome_Artista, COUNT(Login) AS Gostam
+					FROM GostaArtista, Artista
+					WHERE GostaArtista.URI_Artista = Artista.URI_Artista
+					GROUP BY Artista.Nome_Artista order by Gostam DESC;
+			"""
+			)
 
 def filmesMaisCurtidos():
 	print('Filmes mais gostados')
-	executar("""SELECT 
-			URI_filme, 
-			COUNT(Login) AS gostam 
-			FROM GostaFilme 
-			GROUP BY URI_Filme ORDER BY gostam DESC
-		""")
+	executar(
+			"""
+				SELECT Filme.Nome_filme, COUNT(Login) AS gostam 
+					FROM GostaFilme, Filme
+					WHERE GostaFilme.URI_Filme = Filme.URI_Filme
+					GROUP BY Filme.Nome_Filme ORDER BY gostam DESC
+			"""
+			)
 def pessoasQueMaisGostaramFilmes():
 	print('Pessoas que mais gostaram de filmes')
-	executar("""SELECT 
-			Login, 
-			COUNT(URI_filme) AS gosta 
-			FROM GostaFilme 
-			GROUP BY login ORDER BY gosta DESC
-		""")
+	executar("""
+				SELECT Login, COUNT(URI_filme) AS gosta 
+					FROM GostaFilme 
+					GROUP BY login ORDER BY gosta DESC
+			"""
+			)
 
 def pessoasQueMaisGostaramArtistas():
 	print('Pessoas que mais gostaram de Artistas')
-	executar("""SELECT 
-			Login,
-			COUNT(URI_Artista) AS Gosta
-			FROM GostaArtista
-			GROUP BY Login order by Gosta DESC;
-		""")
+	executar("""
+				SELECT Login, COUNT(URI_Artista) AS Gosta
+					FROM GostaArtista
+					GROUP BY Login order by Gosta DESC;
+			"""
+			)
 
 def dadosGraficos(dados, xlabel, ylabel, tam):
 	dados()#leitura dos dados do db
@@ -318,5 +321,3 @@ dadosGraficos(pessoasQueMaisGostaramFilmes,'Pessoas','Numero de Filmes', 10)
 raw_input('Aperte enter para continuar\n')
 clear()
 dadosGraficos(pessoasQueMaisGostaramArtistas,'Pessoas','Numero de Artistas', 10)
-
-raw_input('Aperte enter para continuar\n')
