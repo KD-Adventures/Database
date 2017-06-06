@@ -1,0 +1,46 @@
+#:kivy 1.9.1
+
+<RedeSocial>:
+	cols: 2
+	rows: 2
+	canvas:
+		Color:
+			rgb: .25, 0, 0
+		Rectangle:
+			pos: self.pos
+			size: self.size
+	Label:
+		size_hint_y: .1
+		id: label_usuario
+		font_size: 30
+		text: root.nome_usuario_atual
+		pos: 0, root.height - self.height
+	AnchorLayout:
+		size_hint: .4, .1
+		TextInput:
+			size_hint: .9, .8
+			id: input_pesquisa
+			font_size: 25
+			multiline: False
+			pos: root.width - self.width, root.height - self.height
+			on_text_validate: root.define_usuario(self.text)
+	BoxLayout:	
+		Button:
+			text: 'mais coisa pra fazer aqui'
+			background_color: (0, 0, .1, 1)
+	BoxLayout:
+		size_hint_x: .4
+		id: amigos
+		orientation: 'vertical'
+		Label:
+			size_hint_y: .1
+			text: 'Amigos'
+		ScrollView:
+			GridLayout:
+				size_hint_y: None
+				id: grid_amigos
+				orientation: 'vertical'	
+				height: self.minimum_height
+				cols: 1
+				rows: root.qtdade_amigos
+				row_default_height: 30

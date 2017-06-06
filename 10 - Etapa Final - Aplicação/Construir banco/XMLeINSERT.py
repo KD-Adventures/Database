@@ -164,6 +164,7 @@ def getData(root, tag):
 					url = child.get(atributo)
 					dado_final.append(extraiTitulo(url))
 					dado_final.append(extraiCategorias(url))
+					print url
 					#dado_final.append(child.get(atributo))
 			
 			elif atributo == "bandUri":
