@@ -1,15 +1,33 @@
-#import xml.etree.ElementTree as ET
-
-
 import sqlite3
 import networkx as nx
 import Tkinter
 import matplotlib.pyplot as plt
 import scipy as sp
 
+#banco = sqlite3.connect("rede.db")
+banco = sqlite3.connect("BANCO.DB")
+cursor = banco.cursor()
 
-def extrairConhecidos():
-	conhecidos = open("conhecidos.txt")
+def view():
+	cursor.execute	(
+						'''
+						CREATE VIEW IF NOT EXISTS ConheceNormalizada AS 
+							SELECT Conhece.Login1, Conhece.Login2 FROM Conhece 
+							UNION 
+							SELECT Conhece.Login2, Conhece.Login1 FROM Conhece 
+							ORDER BY Conhece.Login1 ASC;
+							'''
+					)
+
+	cursor.execute	(
+						'''
+						SELECT * FROM ConheceNormalizada;
+						'''
+					)
+	conhece = cursor.fetchall()
+	return conhece
+
+def criarGrafo(conhecidos):
 
 	G = nx.Graph()
 
@@ -17,7 +35,7 @@ def extrairConhecidos():
 	for linhas in conhecidos:
 
 		grafo = []
-		for nomes in linhas.split():
+		for nomes in linhas:
 			grafo.append(nomes)
 			if nomes not in todosNomes:
 				todosNomes.append(nomes)
@@ -46,18 +64,20 @@ def extrairConhecidos():
 				labels[nome] = nome
 
 	nx.draw_networkx_labels(G,pos,labels,font_size=16)
+	plt.savefig("grafo.png")
+	plt.show()
 
-#
+	return G
 	
+def sugerirAmigos(me, grafo):
 
-	me = "rubens"
-	meusAmigos = nx.single_source_shortest_path_length(G, source=me, cutoff=1)
+	meusAmigos = nx.single_source_shortest_path_length(grafo, source=me, cutoff=1)
 
 	meusAmigos.pop(me)
 	recomendacaoAmigos = {}
 	
 	for amigos in meusAmigos:
-		amigosDosAmigos = nx.single_source_shortest_path_length(G,source=amigos,cutoff=1)
+		amigosDosAmigos = nx.single_source_shortest_path_length(grafo,source=amigos,cutoff=1)
 		
 		for possiveisAmigos in amigosDosAmigos:
 			
@@ -70,16 +90,16 @@ def extrairConhecidos():
 	for i in meusAmigos:
 		recomendacaoAmigos.pop(i)
 	
-	print(recomendacaoAmigos)
-	print(sorted(recomendacaoAmigos, key=recomendacaoAmigos.get, reverse=True))
+	#print(recomendacaoAmigos)
+	recomendados = sorted(recomendacaoAmigos, key=recomendacaoAmigos.get, reverse=True)
 
-
-
-	plt.savefig("grafo.png")
-	plt.show()
+	for i in recomendados:
+		print i
 	
 
 
-if __name__ == "__main__":
-	extrairConhecidos()
+conhecidos = view()
+grafoAmigos = criarGrafo(conhecidos)
 
+sugerirPara = "davib"
+sugerirAmigos(sugerirPara, grafoAmigos)
