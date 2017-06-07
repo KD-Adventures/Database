@@ -9,12 +9,16 @@
 		Rectangle:
 			pos: self.pos
 			size: self.size
+
+	# Nome do usuario no topo da tela
 	Label:
 		size_hint_y: .1
 		id: label_usuario
 		font_size: 30
 		text: root.nome_usuario_atual
 		pos: 0, root.height - self.height
+
+	# Barra de pesquisa
 	AnchorLayout:
 		size_hint: .4, .1
 		TextInput:
@@ -24,10 +28,35 @@
 			multiline: False
 			pos: root.width - self.width, root.height - self.height
 			on_text_validate: root.define_usuario(self.text)
-	BoxLayout:	
+
+	# Regiao inferior esquerda
+	BoxLayout:
 		Button:
+			size_hint_x: .7
 			text: 'mais coisa pra fazer aqui'
 			background_color: (0, 0, .1, 1)
+		BoxLayout:
+			orientation: 'vertical'
+			Label:
+				size_hint_y: .1
+				text: 'Filmes Curtidos'
+			ScrollView:
+				GridLayout:
+					size_hint_y: None
+					id: grid_filmes
+					cols: 1
+					height: self.minimum_height
+					row_default_height: 20
+			Label:
+				size_hint_y: .1
+				text: 'Artistas Curtidos'
+			ScrollView:
+				GridLayout:
+					size_hint_y: None
+					id: grid_artistas
+		
+
+	# Lista de amigos
 	BoxLayout:
 		size_hint_x: .4
 		id: amigos
