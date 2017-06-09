@@ -1,11 +1,20 @@
 #:kivy 1.9.1
 
+<FilmeLabel>:
+	shorten: True
+	shorten_from: 'right'
+	halign: 'left'
+	padding: 10, 5
+
 <RedeSocial>:
 	cols: 2
 	rows: 2
+	on_parent: root.define_usuario('lucasfreitas')
+	on_size: root.mostra_informacoes()
+
 	canvas:
 		Color:
-			rgb: .25, 0, 0
+			rgba: .25, 0, 0, 1
 		Rectangle:
 			pos: self.pos
 			size: self.size
@@ -36,6 +45,7 @@
 			text: 'mais coisa pra fazer aqui'
 			background_color: (0, 0, .1, 1)
 		BoxLayout:
+            id: sla
 			orientation: 'vertical'
 			Label:
 				size_hint_y: .1
@@ -43,6 +53,7 @@
 			ScrollView:
 				GridLayout:
 					size_hint_y: None
+					spacing: 5
 					id: grid_filmes
 					cols: 1
 					height: self.minimum_height

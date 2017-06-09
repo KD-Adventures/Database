@@ -1,17 +1,24 @@
 import sqlite3
+import time
 
 from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.uix.button import Button
 from kivy.uix.label import Label
-#from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import StringProperty, NumericProperty
+#from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
+from kivy.uix.anchorlayout import AnchorLayout
+#from kivy.clock import Clock
+#from kivy.graphics import Color, Rectangle
+
 from functools import partial
 
 banco = sqlite3.connect('BANCO.DB')
 cursor = banco.cursor()
 
+class FilmeLabel(Label):
+	pass
 
 class RedeSocial(GridLayout):
 	nome_usuario_atual = StringProperty()
@@ -29,6 +36,7 @@ class RedeSocial(GridLayout):
 								Conhece
 							where
 								Conhece.Login1 = '""" + self.login_usuario_atual + "'")
+
 		amigos = cursor.fetchall()
 		self.qtdade_amigos = len(amigos)
 		for amigo in amigos:
@@ -50,10 +58,15 @@ class RedeSocial(GridLayout):
 									G.URI_Filme = F.URI_Filme
 							where
 								G.Login = '""" + self.login_usuario_atual + "'")
+
 		filmes = cursor.fetchall()
 		for filme in filmes:
-			label_filme = Label(text = filme[0])
-			grid_filmes.add_widget(label_filme)
+			label_filme = FilmeLabel(text = filme[0][:-7], text_size = [grid_filmes.size[0], None])
+			anchor = AnchorLayout()
+			anchor.add_widget(label_filme)
+			grid_filmes.add_widget(anchor)
+
+
 
 
 	# Apresenta todas as informacoes do usuario atual na tela
@@ -79,9 +92,7 @@ class RedeSocial(GridLayout):
 
 class RedeSocialApp(App):
 	def build(self):
-		rede = RedeSocial()
-		rede.define_usuario('lucasfreitas')
-		return rede
+		return RedeSocial()
 
 
 if __name__ == '__main__':
