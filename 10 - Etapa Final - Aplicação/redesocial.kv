@@ -1,15 +1,17 @@
-#:kivy 1.9.1
 
+# Widget para o nome dos filmes
 <FilmeLabel>:
+	#on_parent: self.configura_filme_label()
 	shorten: True
 	shorten_from: 'right'
 	halign: 'left'
 	padding: 10, 5
 
+
+# Widget principal
 <RedeSocial>:
 	cols: 2
 	rows: 2
-	on_parent: root.define_usuario('lucasfreitas')
 	on_size: root.mostra_informacoes()
 
 	canvas:
