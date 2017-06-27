@@ -12,6 +12,8 @@
 <RedeSocial>:
 	cols: 2
 	rows: 2
+	padding: 10, 10
+	spacing: 10
 	on_size: root.mostra_informacoes()
 
 	canvas:
@@ -30,24 +32,48 @@
 		pos: 0, root.height - self.height
 
 	# Barra de pesquisa
-	AnchorLayout:
+	TextInput:
 		size_hint: .4, .1
-		TextInput:
-			size_hint: .9, .8
-			id: input_pesquisa
-			font_size: 25
-			multiline: False
-			pos: root.width - self.width, root.height - self.height
-			on_text_validate: root.define_usuario(self.text)
+		id: input_pesquisa
+		font_size: 25
+		multiline: False
+		pos: root.width - self.width, root.height - self.height
+		on_text_validate: root.define_usuario(self.text)
 
 	# Regiao inferior esquerda
 	BoxLayout:
-		Button:
-			size_hint_x: .7
-			text: 'mais coisa pra fazer aqui'
-			background_color: (0, 0, .1, 1)
+		#Recomendacoes
 		BoxLayout:
-            id: sla
+			size_hint_x: .7
+			orientation: 'vertical'
+
+			#Recomendações de filmes
+			Label:
+				size_hint_y: .1
+				text: 'Filmes recomendados'
+			ScrollView:
+				GridLayout:
+					size_hint_y: None
+					spacing: 5
+					id: grid_recom_filmes
+					cols: 1
+					height: self.minimum_height
+					row_default_height: 20
+			#Recomendacoes de amigos
+			Label:
+				size_hint_y: .1
+				text: 'Você talvez conheça'
+			ScrollView:
+				GridLayout:
+					size_hint_y: None
+					spacing: 5
+					id: grid_recom_amigos
+					cols: 1
+					height: self.minimum_height
+					row_default_height: 20
+
+		#Filmes e Artistas
+		BoxLayout:
 			orientation: 'vertical'
 			Label:
 				size_hint_y: .1
@@ -66,19 +92,25 @@
 			ScrollView:
 				GridLayout:
 					size_hint_y: None
+					spacing: 5
 					id: grid_artistas
+					cols: 1
+					height: self.minimum_height
+					row_default_height: 20
 		
 
 	# Lista de amigos
 	BoxLayout:
-		size_hint_x: .4
+		size_hint_x: .25
 		id: amigos
 		orientation: 'vertical'
 		Label:
-			size_hint_y: .1
+			size_hint_y: .05
 			text: 'Amigos'
 		ScrollView:
 			GridLayout:
+				padding: 15, 5
+				spacing: 5
 				size_hint_y: None
 				id: grid_amigos
 				orientation: 'vertical'	

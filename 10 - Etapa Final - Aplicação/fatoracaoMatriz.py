@@ -6,7 +6,7 @@ banco = sqlite3.connect("BANCO.DB")
 cursor = banco.cursor()
 
 
-def criarMatriz():
+def criar_matriz():
 	cursor.execute(
 				'''
 					SELECT * FROM GostaFilme;
@@ -35,9 +35,6 @@ def criarMatriz():
 		else:
 			gostoUsuario[login].append((url,nota))
 
-
-
-
 	matrix = []
 	for i in gostoUsuario:
 		linha = np.zeros(len(filmes))
@@ -50,10 +47,11 @@ def criarMatriz():
 		matrix.append(linha)
 
 	matrix = np.array(matrix)
-	return matrix
+	return (matrix, filmes)
 
-def calcularMatriz(R):
 
+def calcular_matriz():
+	(R, filmes) = criar_matriz()
 
 	K = 2
 	P = np.random.rand(len(R),K)
@@ -66,10 +64,7 @@ def calcularMatriz(R):
 	# Transposta de Q
 	Q = Q.T 
 
-
 	for step in range(steps):
-		if step % 100 == 0:
-			print("Step: {}".format(step))
 		for i in range(len(R)):
 			for j in range(len(R[i])):
 				if R[i][j] > 0:
@@ -88,15 +83,4 @@ def calcularMatriz(R):
 		if e < 0.001:
 			break
 
-	#print(P)
-	#print(Q.T)
-
-	#print("\n\n\n")
-	print(R)
-	print(np.dot(P,Q))
-
-
-R = criarMatriz()
-porra = R.shape
-print (porra)
-#calcularMatriz(R)
+	return (np.dot(P,Q), filmes)

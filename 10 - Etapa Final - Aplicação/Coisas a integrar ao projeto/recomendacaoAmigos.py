@@ -1,6 +1,6 @@
 import sqlite3
 import networkx as nx
-import Tkinter
+import tkinter
 import matplotlib.pyplot as plt
 import scipy as sp
 
@@ -94,7 +94,7 @@ def sugerirAmigos(me, grafo):
 	recomendados = sorted(recomendacaoAmigos, key=recomendacaoAmigos.get, reverse=True)
 
 	for i in recomendados:
-		print i
+		print (i)
 	
 
 
