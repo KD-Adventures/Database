@@ -17,7 +17,7 @@ from kivy.uix.gridlayout import GridLayout
 #from kivy.graphics import Color, Rectangle
 from kivy.clock import Clock
 
-from recomendacaoAmigos import criar_grafo, sugerir_amigos, imprimir_grafo
+from recomendacaoAmigos import criar_grafo, sugerir_amigos, imprimir_grafo, imprimir_caminho_recomendacoes
 from fatoracaoMatriz import calcular_matriz
 
 banco = sqlite3.connect('BANCO.DB')
@@ -36,6 +36,9 @@ class RedeSocial(GridLayout):
 	ordem_filmes = []
 	filmes_usuario_atual = []
 	uris_filmes_usuario_atual = []
+	todosNomesUsuario = []
+	amigosUsuario = []
+	amigosRecomendados = []
 
 
 	# Construtor
@@ -46,6 +49,10 @@ class RedeSocial(GridLayout):
 		cursor.execute('select * from ConheceNormalizada;')
 		conhecidos = cursor.fetchall()
 		self.grafo_amigos = criar_grafo(conhecidos)
+		
+		for i in conhecidos:
+			if i[0] not in self.todosNomesUsuario:
+				self.todosNomesUsuario.append(i[0])
 		imprimir_grafo(self.grafo_amigos, conhecidos)
 
 		# Constroi a matriz de recomendacao de filmes
@@ -88,6 +95,7 @@ class RedeSocial(GridLayout):
 								C.Login1 = '""" + self.login_usuario_atual + "'")
 		amigos = cursor.fetchall()
 		self.qtdade_amigos = len(amigos)
+		self.amigosUsuario = amigos
 
 		# Cria os botoes
 		for amigo in amigos:
@@ -155,7 +163,7 @@ class RedeSocial(GridLayout):
 
 
 	# Apresenta na tela pessoas que o usuario talvez conheca
-	def recomenda_amigos(self, *args):
+	def recomenda_amigos(self, *args, imprimirGrafo):
 		# Limpa o grid
 		grid_recom_amigos = self.ids.grid_recom_amigos
 		grid_recom_amigos.clear_widgets()
@@ -174,7 +182,9 @@ class RedeSocial(GridLayout):
 			i += 1
 			if i == 5:
 				break
-
+		
+		if imprimirGrafo == True:
+			imprimir_caminho_recomendacoes(self.grafo_amigos, self.login_usuario_atual, self.amigosUsuario, recomendados, self.todosNomesUsuario)
 
 	# Apresenta na tela filmes que talvez a pessoa goste
 	def recomenda_filmes(self, *args):
@@ -222,7 +232,7 @@ class RedeSocial(GridLayout):
 		self.mostra_amigos()
 		self.mostra_filmes()
 		self.mostra_artistas()
-		self.recomenda_amigos()
+		self.recomenda_amigos(imprimirGrafo=True)
 		self.recomenda_filmes()
 		
 
