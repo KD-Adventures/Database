@@ -1,9 +1,42 @@
 import sqlite3
 import networkx as nx
+import matplotlib.pyplot as plt
 import tkinter
 
 banco = sqlite3.connect("BANCO.DB")
 cursor = banco.cursor()
+
+def imprimir_grafo(grafo, conhecidos):
+
+	todosNomes = []
+	for linhas in conhecidos:
+		for nomes in linhas:
+			if nomes not in todosNomes:
+				todosNomes.append(nomes)
+
+	pos=nx.spring_layout(grafo)
+
+	nx.draw_networkx_nodes(grafo,pos,
+                       grafo.nodes(),
+                       node_color='r',
+                       node_size=500,
+                   alpha=0.8)
+
+	nx.draw_networkx_edges(grafo,pos,
+                       grafo.edges(),
+                       width=8,alpha=0.5,edge_color='r')
+
+	labels = {}
+	for i in grafo.nodes():
+		for nome in todosNomes:
+			if nome == i:
+				labels[nome] = nome
+
+	nx.draw_networkx_labels(grafo,pos,labels,font_size=16)
+	plt.show()
+
+
+
 
 def criar_grafo(conhecidos):
 	G = nx.Graph()
@@ -23,7 +56,7 @@ def criar_grafo(conhecidos):
 	return G
 
 	
-def sugerir_amigos(me, grafo):
+def sugerir_amigos(me, grafo, imprimir):
 	meusAmigos = nx.single_source_shortest_path_length(grafo, source=me, cutoff=1)
 
 	meusAmigos.pop(me)
@@ -43,7 +76,10 @@ def sugerir_amigos(me, grafo):
 	for i in meusAmigos:
 		recomendacaoAmigos.pop(i)
 	
-	#print(recomendacaoAmigos)
 	recomendados = sorted(recomendacaoAmigos, key=recomendacaoAmigos.get, reverse=True)
+
+	if imprimir == True:		
+		for i in recomendados:
+			print("{}: {}".format(i, recomendacaoAmigos[i]))
 
 	return recomendados

@@ -17,7 +17,7 @@ from kivy.uix.gridlayout import GridLayout
 #from kivy.graphics import Color, Rectangle
 from kivy.clock import Clock
 
-from recomendacaoAmigos import criar_grafo, sugerir_amigos
+from recomendacaoAmigos import criar_grafo, sugerir_amigos, imprimir_grafo
 from fatoracaoMatriz import calcular_matriz
 
 banco = sqlite3.connect('BANCO.DB')
@@ -34,6 +34,8 @@ class RedeSocial(GridLayout):
 	login_usuario_atual = StringProperty('lucasfreitas')
 	qtdade_amigos = NumericProperty()
 	ordem_filmes = []
+	filmes_usuario_atual = []
+	uris_filmes_usuario_atual = []
 
 
 	# Construtor
@@ -42,7 +44,9 @@ class RedeSocial(GridLayout):
 
 		# Constroi o grafo com todas as pessoas da rede e seus conhecidos
 		cursor.execute('select * from ConheceNormalizada;')
-		self.grafo_amigos = criar_grafo(cursor.fetchall())
+		conhecidos = cursor.fetchall()
+		self.grafo_amigos = criar_grafo(conhecidos)
+		imprimir_grafo(self.grafo_amigos, conhecidos)
 
 		# Constroi a matriz de recomendacao de filmes
 		if os.stat("matriz.txt").st_size > 0 and os.stat("ordem.txt").st_size > 0:
@@ -101,7 +105,7 @@ class RedeSocial(GridLayout):
 
 		# Busca todos os filmes
 		cursor.execute (""" select
-								F.Nome_Filme, G.Nota
+								F.Nome_Filme, G.Nota, F.URI_Filme
 							from
 								GostaFilme as G
 								inner join Filme as F on
@@ -109,6 +113,13 @@ class RedeSocial(GridLayout):
 							where
 								G.Login = '""" + self.login_usuario_atual + "'")
 		filmes = cursor.fetchall()
+		filmes_usuario_atual = []
+		for titulo in filmes:
+			filmes_usuario_atual.append(titulo[0][:-7])
+
+		self.uris_filmes_usuario_atual = []
+		for i in filmes:
+			self.uris_filmes_usuario_atual.append(i[2].strip())
 
 		# Imprime os filmes na tela
 		for filme in filmes:
@@ -150,7 +161,8 @@ class RedeSocial(GridLayout):
 		grid_recom_amigos.clear_widgets()
 
 		# Busca todas as recomendacoes
-		recomendados = sugerir_amigos(self.login_usuario_atual, self.grafo_amigos)
+		recomendados = sugerir_amigos(self.login_usuario_atual, self.grafo_amigos, imprimir=True)
+		#print(recomendados)
 
 		# Imprime na tela
 		i = 0
@@ -176,12 +188,13 @@ class RedeSocial(GridLayout):
 		except:
 			return
 		nota_filmes_usuario = self.R[index]
-
+			
 		index = 0
 		filmes_curtidos = []
-		for nota_filme in nota_filmes_usuario:
-			if nota_filme >= 4:
-				filmes_curtidos.append(self.ordem_filmes[index])
+		for nota_filme in sorted(nota_filmes_usuario):
+			if nota_filme >= 4:	
+				if self.ordem_filmes[index].strip() not in self.uris_filmes_usuario_atual:
+					filmes_curtidos.append(self.ordem_filmes[index])
 			index += 1
 
 		filmes_curtidos = sorted(filmes_curtidos)
