@@ -36,24 +36,23 @@ class RedeSocial(GridLayout):
 	ordem_filmes = []
 	filmes_usuario_atual = []
 	uris_filmes_usuario_atual = []
-	todosNomesUsuario = []
-	amigosUsuario = []
 	amigosRecomendados = []
+	todosNomesUsuario = []
 
 
 	# Construtor
 	def __init__(self, **kwargs):
-		super().__init__()
+		super(RedeSocial,self).__init__()
+		self.imprimirGrafo = True
 
 		# Constroi o grafo com todas as pessoas da rede e seus conhecidos
 		cursor.execute('select * from ConheceNormalizada;')
 		conhecidos = cursor.fetchall()
 		self.grafo_amigos = criar_grafo(conhecidos)
 		
-		for i in conhecidos:
-			if i[0] not in self.todosNomesUsuario:
-				self.todosNomesUsuario.append(i[0])
-		imprimir_grafo(self.grafo_amigos, conhecidos)
+
+		#Clock.schedule_once(lambda d: imprimir_grafo(self.grafo_amigos, conhecidos), 1/60)
+#		imprimir_grafo(self.grafo_amigos, conhecidos)
 
 		# Constroi a matriz de recomendacao de filmes
 		if os.stat("matriz.txt").st_size > 0 and os.stat("ordem.txt").st_size > 0:
@@ -76,7 +75,7 @@ class RedeSocial(GridLayout):
 				self.usuarios_em_ordem.append(row[0])
 
 		Clock.schedule_once(partial(self.define_usuario, 'lucasfreitas'), .7)
-		# Esse clock é necessário pra dar tempo do Kivy carregar tudo antes de executar a
+		# Esse clock e necessario pra dar tempo do Kivy carregar tudo antes de executar a
 		# funcao "define_usuario" pela primeira vez
 		
 
@@ -95,7 +94,6 @@ class RedeSocial(GridLayout):
 								C.Login1 = '""" + self.login_usuario_atual + "'")
 		amigos = cursor.fetchall()
 		self.qtdade_amigos = len(amigos)
-		self.amigosUsuario = amigos
 
 		# Cria os botoes
 		for amigo in amigos:
@@ -163,7 +161,7 @@ class RedeSocial(GridLayout):
 
 
 	# Apresenta na tela pessoas que o usuario talvez conheca
-	def recomenda_amigos(self, *args, imprimirGrafo):
+	def recomenda_amigos(self, imprimirGrafo, *args):
 		# Limpa o grid
 		grid_recom_amigos = self.ids.grid_recom_amigos
 		grid_recom_amigos.clear_widgets()
@@ -184,7 +182,8 @@ class RedeSocial(GridLayout):
 				break
 		
 		if imprimirGrafo == True:
-			imprimir_caminho_recomendacoes(self.grafo_amigos, self.login_usuario_atual, self.amigosUsuario, recomendados, self.todosNomesUsuario)
+			#imprimir_caminho_recomendacoes(self.grafo_amigos, self.login_usuario_atual, self.amigosUsuario, recomendados, self.todosNomesUsuario)
+			Clock.schedule_once(lambda d: imprimir_caminho_recomendacoes(self.grafo_amigos, self.login_usuario_atual, recomendados), 1/60)
 
 	# Apresenta na tela filmes que talvez a pessoa goste
 	def recomenda_filmes(self, *args):
@@ -192,7 +191,7 @@ class RedeSocial(GridLayout):
 		grid_recom_filmes = self.ids.grid_recom_filmes
 		grid_recom_filmes.clear_widgets()
 
-		# Busca todas as recomendações
+		# Busca todas as recomendacoes
 		try:
 			index = self.usuarios_em_ordem.index(self.login_usuario_atual)
 		except:
@@ -211,11 +210,12 @@ class RedeSocial(GridLayout):
 
 		# Imprime na tela
 		i = 0
+		print("\nFilmes:")
 		for filme in filmes_curtidos:
-			print(filme)
+			print(filme.strip())
 			cursor.execute("select Nome_Filme from Filme where URI_Filme = '" + filme.rstrip() + "';")
 			titulo = cursor.fetchone()[0]
-			print (titulo)
+			print (titulo + "\n")
 			label_recom_filmes = FilmeLabel(	text = titulo[:-7],
 												text_size = [grid_recom_filmes.size[0], None],
 												font_size = 13)
@@ -232,7 +232,7 @@ class RedeSocial(GridLayout):
 		self.mostra_amigos()
 		self.mostra_filmes()
 		self.mostra_artistas()
-		self.recomenda_amigos(imprimirGrafo=True)
+		self.recomenda_amigos(self.imprimirGrafo)
 		self.recomenda_filmes()
 		
 
@@ -248,6 +248,7 @@ class RedeSocial(GridLayout):
 		self.login_usuario_atual = login
 		self.ids.input_pesquisa.text = '' # Limpa a barra de pesquisa
 		self.mostra_informacoes()
+
 
 
 

@@ -83,4 +83,5 @@ def calcular_matriz():
 		if e < 0.001:
 			break
 
+
 	return (np.dot(P,Q), filmes)

@@ -1,18 +1,24 @@
 import sqlite3
 import networkx as nx
 import matplotlib.pyplot as plt
-import tkinter
+import Tkinter
 
 banco = sqlite3.connect("BANCO.DB")
 cursor = banco.cursor()
 
 
-def imprimir_caminho_recomendacoes(G, eu, amigos, amigosRecomendados, todosNomes):
+def imprimir_caminho_recomendacoes(G, eu, amigosRecomendados):
 	
 	pos=nx.spring_layout(G)
 	
+	todosNomes = []
 	amigos = []
 	for edges in G.edges():
+		if edges[0] not in todosNomes:
+			todosNomes.append(edges[0])
+		if edges[1] not in todosNomes:
+			todosNomes.append(edges[1])
+
 		if edges[0] == eu:
 			if edges[1] not in amigos:
 				amigos.append(edges[1])
@@ -20,7 +26,7 @@ def imprimir_caminho_recomendacoes(G, eu, amigos, amigosRecomendados, todosNomes
 			if edges[0] not in amigos:
 				amigos.append(edges[0])
 		
-	colorNode = []				
+
 	colorEdge = []
 	for edges in G.edges():
 		if edges[0] == eu or edges[1] == eu:
@@ -37,27 +43,40 @@ def imprimir_caminho_recomendacoes(G, eu, amigos, amigosRecomendados, todosNomes
 				colorEdge.append('yellow')
 		else:
 			colorEdge.append('grey')
-
+	
+	
+	nodeSizeDefault = 300
+	nodeSizeMe = 3*nodeSizeDefault
+	nodeSizeAmigo = 1.5*nodeSizeDefault
+	nodeSizeOutros = nodeSizeDefault
+	nodeSizeRecomendados = 1.2*nodeSizeDefault
+	nodeSize = []
 	colorNode = []
 	for node in G:
 		if node == eu:
 			colorNode.append('red')
+			nodeSize.append(nodeSizeMe)
 		elif node in amigos:
 			colorNode.append('green')
+			nodeSize.append(nodeSizeAmigo)
 		elif node in amigosRecomendados:
 			colorNode.append('yellow')
+			nodeSize.append(nodeSizeRecomendados)
 		else:
 			colorNode.append('grey')
+			nodeSize.append(nodeSizeOutros)
 
 	nx.draw_networkx_nodes(G,pos,
-                       G.nodes(),
-                       node_color=colorNode,
-                       node_size=500,
-                   alpha=0.8)
+						G.nodes(),
+						node_color=colorNode,
+						node_size=nodeSize,
+           				alpha=0.8)
 
 	nx.draw_networkx_edges(G,pos,
-                       G.edges(),
-                       width=8,alpha=0.5,edge_color=colorEdge)
+                       	G.edges(),
+                       	width=5,
+                       	alpha=0.5,
+                       	edge_color=colorEdge)
 
 	labels = {}
 	for i in G.nodes():
@@ -143,7 +162,8 @@ def sugerir_amigos(me, grafo, imprimir):
 	
 	recomendados = sorted(recomendacaoAmigos, key=recomendacaoAmigos.get, reverse=True)
 
-	if imprimir == True:		
+	if imprimir == True:
+		print("\nRecomendacao de Amigos:")
 		for i in recomendados:
 			print("{}: {}".format(i, recomendacaoAmigos[i]))
 
