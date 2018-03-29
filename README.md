@@ -1,4 +1,6 @@
-# Trabalho desenvolvido para a disciplina Introdução A Bancos De Dados (CSB30) do curse de Engenharia de Computação da Universidade Tecnológica Federal do Paraná
+# Introdução A Bancos De Dados (CSB30)
+
+Trabalho desenvolvido para a disciplina Introdução A Bancos De Dados do curso de Engenharia de Computação da Universidade Tecnológica Federal do Paraná
 
 
 ## Integrantes do grupo
